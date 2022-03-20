@@ -5,8 +5,9 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const port = 8080;
+const port = 3333;
 const db = require('./queries');
+const {authenticate} = require('./middleware');
 
 app.use(cors());
 app.use(express.json());
@@ -34,28 +35,27 @@ app.post('/login', async (req, res) => {
     
       const token = jwt.sign({
         id: user.id,
-        username: user.username,
-        name: user.name,
+        username: user.username
       }, Buffer.from(process.env.ACCESS_TOKEN_SECRET, 'base64'));
-    
+      
       res.send({ token });
     } catch (error) {
       res.status(500).send({ error: error.message })
     }
   });
   
-  app.get('/session', async (req, res) => {
-    const token = req.headers['x-auth-token'];
+  app.get('/session', authenticate, async (req, res) => {
+    const { username } = req.user;
   
-    try {
-      const payload = jwt.verify(token, Buffer.from(process.env.ACCESS_TOKEN_SECRET, 'base64'));
-      res.send({ message: `You are authenticated as ${payload.username}` })
-    } catch (error) {
-      res.status(401).send({
-        error: 'Invalid token',
-      });
-    }
+    res.status(200).send({
+      message: `You are authenticated as ${username}`
+    });
   });
 
+  // CATEGORIES
+  app.get('/categories', async (req, res) => {
+    const categories = await db.getCategories();
+    res.send(categories)
+  })
 
 app.listen(port, console.log(`Listening on request on port ${port}`))

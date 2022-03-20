@@ -13,7 +13,14 @@ const getUserByUsername = (username) => {
     .then(res => res.rows[0])
 }
 
+const getCategories = () => {
+    const sql = 'SELECT * FROM categories';
+    return pool.query(sql)
+    .then(res => res.rows);
+}
+
 
 module.exports = {
     getUserByUsername,
+    getCategories
 }
