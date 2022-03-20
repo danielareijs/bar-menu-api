@@ -55,7 +55,23 @@ app.post('/login', async (req, res) => {
   // CATEGORIES
   app.get('/categories', async (req, res) => {
     const categories = await db.getCategories();
+    console.log(categories)
     res.send(categories)
   })
+
+   //DRINKS
+
+   app.get('/drinks/:category', async (req, res) => {
+    const category = req.params.category;
+    const drinks = await db.getDrinksByCategory(category);
+    res.send(drinks);
+  })
+
+  app.post('/drinks', async (req, res) => {
+    const drink = await db.createDrink(req.body.drink)
+    res.send(drink)
+  }) 
+
+  
 
 app.listen(port, console.log(`Listening on request on port ${port}`))

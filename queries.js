@@ -20,7 +20,25 @@ const getCategories = () => {
 }
 
 
+const getDrinksByCategory = (category) => {
+    const sql = 'SELECT * FROM drinks WHERE category = $1';
+    return pool.query(sql, [category])
+    .then(res => res.rows)
+}
+
+const createDrink = (drink) => {
+    console.log(drink)
+    const sql = `INSERT INTO drinks (name, category, price, ingredients, volume, available)
+    VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+
+    return pool.query(sql, [drink.name, drink.category, drink.price, drink.ingredients, drink.volume, true])
+    .then(res => res.rows[0])
+}
+
+
 module.exports = {
     getUserByUsername,
-    getCategories
+    getCategories,
+    getDrinksByCategory,
+    createDrink
 }
