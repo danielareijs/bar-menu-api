@@ -19,6 +19,12 @@ const getCategories = () => {
     .then(res => res.rows);
 }
 
+// DRINKS
+const getDrinkById = (id) => {
+    const sql = 'SELECT * FROM drinks WHERE id = $1';
+    return pool.query(sql, [id])
+    .then(res => res.rows[0])
+}
 
 const getDrinksByCategory = (category) => {
     const sql = 'SELECT * FROM drinks WHERE category = $1';
@@ -35,10 +41,26 @@ const createDrink = (drink) => {
     .then(res => res.rows[0])
 }
 
+const updateDrink = (id, drink) => {
+    const sql = `UPDATE drinks 
+    SET name = $1, category = $2, price = $3, ingredients = $4, volume = $5, available = $6
+    WHERE id = $7`
+    return pool.query(sql, [drink.name, drink.category, drink.price, drink.ingredients, drink.volume, drink.available, id])
+    .then(res => res.rows[0])
+}
+
+const deleteDrink = (id) => {
+    const sql = `DELETE FROM drinks WHERE id = $1 RETURNING id`;
+    return pool.query(sql, [id])
+    .then(res => res.rows[0])
+}
 
 module.exports = {
     getUserByUsername,
     getCategories,
+    getDrinkById,
     getDrinksByCategory,
-    createDrink
+    createDrink,
+    updateDrink,
+    deleteDrink
 }

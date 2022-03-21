@@ -8,6 +8,7 @@ const app = express();
 const port = 3333;
 const db = require('./queries');
 const {authenticate} = require('./middleware');
+const { Pool } = require('pg');
 
 app.use(cors());
 app.use(express.json());
@@ -61,16 +62,37 @@ app.post('/login', async (req, res) => {
 
    //DRINKS
 
-   app.get('/drinks/:category', async (req, res) => {
+  app.get('/:category/drinks', async (req, res) => {
+    console.log('category/drinks')
     const category = req.params.category;
     const drinks = await db.getDrinksByCategory(category);
     res.send(drinks);
+  })
+
+  app.get('/drinks/:id', async (req, res) => {
+    console.log('drinks/id');
+    const id = req.params.id;
+    const drink = await db.getDrinkById(id);
+    res.send(drink);
+  })
+
+  app.put('/drinks/:id', async (req, res) => {
+    const id = req.params.id;
+    const drink = req.body;
+    const result = await db.updateDrink(id, drink)
+    res.send(drink);
   })
 
   app.post('/drinks', async (req, res) => {
     const drink = await db.createDrink(req.body.drink)
     res.send(drink)
   }) 
+
+  app.delete('/drinks/:id', async (req, res) => {
+    const id = req.params.id;
+    const drink = await db.deleteDrink(id);
+    res.send(drink)
+  })
 
   
 
