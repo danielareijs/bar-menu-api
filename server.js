@@ -56,20 +56,44 @@ app.post('/login', async (req, res) => {
   // CATEGORIES
   app.get('/categories', async (req, res) => {
     const categories = await db.getCategories();
-    console.log(categories)
     res.send(categories)
   })
 
   app.post('/categories', async (req, res) => {
-    console.log(req.body);
     const category = await db.createCategory(req.body.name)
     res.send(category);
   })
 
+  app.delete('/categories', (req, res) => {
+    const result = db.deleteCategory(req.body.category);
+    res.send(result)
+  })
+
+  // app.get('/category-drinks', async (req, res) => {
+  //   const results = await db.getCategoryDrinks()
+  //   res.send(results);
+  // })
+
+  // CATEGORY DRINKS 
+
+  app.post('/categories/add-drink', (req, res) => {
+    const result = db.addDrinkToCategory(req.body.drink, req.body.category)
+    res.send(result);
+  })
+
+  app.delete('/categories/remove-drink', async (req, res) => {
+    const result = await db.removeDrinkFromCategory(req.body.drink, req.body.category);
+    res.send(result);
+  })
+
    //DRINKS
 
+  app.get('/drinks', async (req, res) => {
+    const drinks = await db.getDrinks();
+    res.send(drinks);
+  })
+
   app.get('/:category/drinks', async (req, res) => {
-    console.log('category/drinks')
     const category = req.params.category;
     const drinks = await db.getDrinksByCategory(category);
     res.send(drinks);
@@ -99,6 +123,8 @@ app.post('/login', async (req, res) => {
     const drink = await db.deleteDrink(id);
     res.send(drink)
   })
+
+  
 
   
 
