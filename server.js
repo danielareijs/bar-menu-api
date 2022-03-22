@@ -64,15 +64,13 @@ app.post('/login', async (req, res) => {
     res.send(category);
   })
 
-  app.delete('/categories', (req, res) => {
-    const result = db.deleteCategory(req.body.category);
-    res.send(result)
+  app.delete('/categories', async (req, res) => {
+    try {
+      const result = await db.deleteCategory(req.body.category);
+    }catch(err){
+      res.status(500).send({error: err.massage})
+    }
   })
-
-  // app.get('/category-drinks', async (req, res) => {
-  //   const results = await db.getCategoryDrinks()
-  //   res.send(results);
-  // })
 
   // CATEGORY DRINKS 
 
@@ -120,6 +118,8 @@ app.post('/login', async (req, res) => {
 
   app.delete('/drinks/:id', async (req, res) => {
     const id = req.params.id;
+
+    await db.removeDrinkFromCategories(id);
     const drink = await db.deleteDrink(id);
     res.send(drink)
   })
