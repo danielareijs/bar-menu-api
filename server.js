@@ -60,6 +60,12 @@ app.post('/login', async (req, res) => {
     res.send(categories)
   })
 
+  app.post('/categories', async (req, res) => {
+    console.log(req.body);
+    const category = await db.createCategory(req.body.name)
+    res.send(category);
+  })
+
    //DRINKS
 
   app.get('/:category/drinks', async (req, res) => {

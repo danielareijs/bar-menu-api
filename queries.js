@@ -13,10 +13,18 @@ const getUserByUsername = (username) => {
     .then(res => res.rows[0])
 }
 
+// CATEGORIES
+
 const getCategories = () => {
     const sql = 'SELECT * FROM categories';
     return pool.query(sql)
     .then(res => res.rows);
+}
+
+const createCategory = (category) => {
+    const sql = 'INSERT INTO categories (name) VALUES ($1) RETURNING id';
+    return pool.query(sql, [category])
+    .then(res => res.rows[0])
 }
 
 // DRINKS
@@ -60,6 +68,7 @@ module.exports = {
     getCategories,
     getDrinkById,
     getDrinksByCategory,
+    createCategory,
     createDrink,
     updateDrink,
     deleteDrink
