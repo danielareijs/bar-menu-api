@@ -40,23 +40,23 @@ const createCategory = (category) => {
 // }
 
 const deleteCategory = (category) => {
-    const sql = `DELETE FROM categories WHERE id = $1`
+    const sql = `DELETE FROM categories WHERE id = $1 RETURNING id`
     return pool.query(sql, [category])
     .then(res => res.rows[0])
 }
-const addDrinkToCategory = (drink,category) => {
+const addDrinkToCategory = (category, drink) => {
     const sql = `INSERT INTO category_drinks (drink, category) VALUES ($1, $2)`;
     return pool.query(sql, [drink, category])
     .then(res => res.rows[0])
     .catch(err => console.log(err))
 }
-const removeDrinkFromCategory = (drink, category) => {
+const removeDrinkFromCategory = (category, drink) => {
     const sql = `DELETE FROM category_drinks
     WHERE drink = $1 AND category = $2`;
     return pool.query(sql, [drink, category])
-    .then(res => res.rows[0])
-    .catch(err => {
-        res.status(401).send(err);
+    .then(res => {
+        console.log(res.rows[0]);
+        return res.rows[0]
     })
 }
 
@@ -71,8 +71,8 @@ const removeDrinkFromCategories = (drink) => {
 // DRINKS
 
 const getDrinks = () => {
-    const sql = `SELECT * FROM drinks AS d
-    JOIN category_drinks AS cd ON cd.drink = d.id`;
+    const sql = `SELECT * FROM drinks
+    ORDER BY name`;
     return pool.query(sql)
     .then(res => res.rows)
     .catch(err => console.log(err))
@@ -100,7 +100,7 @@ const createDrink = (drink) => {
     const sql = `INSERT INTO drinks (name, price, ingredients, volume, available)
     VALUES ($1, $2, $3, $4, $5) RETURNING id`
 
-    return pool.query(sql, [drink.name, drink.price, drink.ingredients, drink.volume, true])
+    return pool.query(sql, [drink.name, drink.price, drink.ingredients, drink.volume, drink.available])
     .then(res => res.rows[0])
     .catch(err => console.log(err))
 }

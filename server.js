@@ -64,23 +64,32 @@ app.post('/login', async (req, res) => {
     res.send(category);
   })
 
-  app.delete('/categories', async (req, res) => {
+  app.delete('/categories/:id', async (req, res) => {
+    const id = req.params.id
+    console.log(id)
     try {
-      const result = await db.deleteCategory(req.body.category);
+      const result = await db.deleteCategory(id);
+      res.send(result);
     }catch(err){
       res.status(500).send({error: err.massage})
     }
   })
 
   // CATEGORY DRINKS 
+  app.get('/:category/drinks', async (req, res) => {
+    const category = req.params.category;
+    const drinks = await db.getDrinksByCategory(category);
+    res.send(drinks);
+  })
 
-  app.post('/categories/add-drink', (req, res) => {
-    const result = db.addDrinkToCategory(req.body.drink, req.body.category)
+  app.post('/:category/drinks', (req, res) => {
+    const result = db.addDrinkToCategory(req.params.category, req.body.drink)
     res.send(result);
   })
 
-  app.delete('/categories/remove-drink', async (req, res) => {
-    const result = await db.removeDrinkFromCategory(req.body.drink, req.body.category);
+  app.delete('/:category/drinks/:id', async (req, res) => {
+    const result = await db.removeDrinkFromCategory(req.params.category, req.params.id);
+    console.log(result)
     res.send(result);
   })
 
@@ -88,12 +97,6 @@ app.post('/login', async (req, res) => {
 
   app.get('/drinks', async (req, res) => {
     const drinks = await db.getDrinks();
-    res.send(drinks);
-  })
-
-  app.get('/:category/drinks', async (req, res) => {
-    const category = req.params.category;
-    const drinks = await db.getDrinksByCategory(category);
     res.send(drinks);
   })
 
