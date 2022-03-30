@@ -60,7 +60,7 @@ app.post('/login', async (req, res) => {
   })
 
   app.post('/categories', async (req, res) => {
-    const category = await db.createCategory(req.body.name)
+    const category = await db.createCategory(req.body)
     res.send(category);
   })
 
@@ -75,10 +75,15 @@ app.post('/login', async (req, res) => {
     }
   })
 
+  app.put('/categories/:id', async (req, res) => {
+    const category = await db.updateCategory(req.body)
+  })
+
   // CATEGORY DRINKS 
   app.get('/:category/drinks', async (req, res) => {
     const category = req.params.category;
     const drinks = await db.getDrinksByCategory(category);
+    console.log(drinks)
     res.send(drinks);
   })
 
