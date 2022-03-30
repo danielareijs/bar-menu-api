@@ -44,10 +44,15 @@ const deleteCategory = (category) => {
     .then(res => res.rows[0])
 }
 
-const updateCategory = (category) => {
-    const sql = `UPDATE TABLE categories
-    SET name = $1, main = $2`;
-    return pool.query(sql, [category.name, category.main])
+const updateCategory = (id, main) => {
+    console.log('ID:', id, 'MAIN:', main)
+    const sql = `UPDATE categories
+    SET main = $1 WHERE id = $2`;
+    return pool.query(sql, [main, id])
+    .then(res => {
+        console.log(res)
+        return res.rows[0]
+    })
 }
 
 // CATEGORY-DRINKS
@@ -92,7 +97,6 @@ const getDrinkById = (id) => {
 }
 
 const createDrink = (drink) => {
-    console.log(drink)
     const sql = `INSERT INTO drinks (name, price, ingredients, volume, available)
     VALUES ($1, $2, $3, $4, $5) RETURNING id`
 

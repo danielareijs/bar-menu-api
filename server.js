@@ -66,7 +66,6 @@ app.post('/login', async (req, res) => {
 
   app.delete('/categories/:id', async (req, res) => {
     const id = req.params.id
-    console.log(id)
     try {
       const result = await db.deleteCategory(id);
       res.send(result);
@@ -76,14 +75,15 @@ app.post('/login', async (req, res) => {
   })
 
   app.put('/categories/:id', async (req, res) => {
-    const category = await db.updateCategory(req.body)
+    console.log('In server: ', req);
+    const category = await db.updateCategory(req.params.id, req.body.main)
+    res.send(category);
   })
 
   // CATEGORY DRINKS 
   app.get('/:category/drinks', async (req, res) => {
     const category = req.params.category;
     const drinks = await db.getDrinksByCategory(category);
-    console.log(drinks)
     res.send(drinks);
   })
 
@@ -94,7 +94,6 @@ app.post('/login', async (req, res) => {
 
   app.delete('/:category/drinks/:id', async (req, res) => {
     const result = await db.removeDrinkFromCategory(req.params.category, req.params.id);
-    console.log(result)
     res.send(result);
   })
 
@@ -106,7 +105,6 @@ app.post('/login', async (req, res) => {
   })
 
   app.get('/drinks/:id', async (req, res) => {
-    console.log('drinks/id');
     const id = req.params.id;
     const drink = await db.getDrinkById(id);
     res.send(drink);
