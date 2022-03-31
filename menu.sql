@@ -11,7 +11,6 @@ CREATE TABLE drinks (
   ingredients TEXT,
   volume TEXT,
   available BOOLEAN
-  -- category INT NOT NULL REFERENCES categories (ID),
 );
 
 CREATE TABLE category_drinks (
@@ -21,7 +20,8 @@ CREATE TABLE category_drinks (
 
 CREATE TABLE categories (
   ID SERIAL PRIMARY KEY,
-  name TEXT UNIQUE
+  name TEXT UNIQUE,
+  main BOOLEAN
 );
 
 INSERT INTO users (username, password)
@@ -44,12 +44,12 @@ INSERT INTO category_drinks (category, drink)
   VALUES (1, 1), (1, 2), (4, 3), (3, 4);
 
 
-INSERT INTO categories (name)
+INSERT INTO categories (name, main)
 VALUES 
-  ('Classic Cocktails'),
-  ('Drinks'),
-  ('Draft Beer'),
-  ('Bottle Beer');
+  ('Classic Cocktails', false),
+  ('Drinks', false),
+  ('Draft Beer', false),
+  ('Bottle Beer', false);
 
 
 SELECT * FROM drinks AS d

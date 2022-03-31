@@ -1,11 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-// const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const port = 3333;
+const port = process.env.PORT
 const db = require('./queries');
 const {authenticate} = require('./middleware');
 const { Pool } = require('pg');
@@ -134,4 +133,4 @@ app.post('/login', async (req, res) => {
 
   
 
-app.listen(port, console.log(`Listening on request on port ${port}`))
+app.listen(port || 3333, console.log(`Listening on request on port ${port}`))
