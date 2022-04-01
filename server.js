@@ -4,7 +4,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const port = process.env.PORT
+const port = process.env.PORT || 3333
 const db = require('./queries');
 const {authenticate} = require('./middleware');
 const { Pool } = require('pg');
@@ -133,4 +133,4 @@ app.post('/login', async (req, res) => {
 
   
 
-app.listen(port || 3333, console.log(`Listening on request on port ${port}`))
+app.listen(port, console.log(`Listening on request on port ${port}`))
