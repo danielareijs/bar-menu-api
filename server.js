@@ -13,6 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 //AUTH 
 app.post('/login', async (req, res) => {
   console.log('In server, login', req.body)
